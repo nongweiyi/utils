@@ -35,10 +35,14 @@ export default {
 export default {
     //登录成功，存储数据，跳转到相应页面
     methods: {
+        //登录成功，存储数据，跳转到相应页面
         loginSucceed() {
             var routerPath = "";
             checkLoginUtil.storeCookie(this.loginForm.username);
-            if (sessionStorage.currentRouterPath) {
+            if (
+                sessionStorage.currentRouterPath &&
+                !sessionStorage.currentRouterPath
+            ) {
                 routerPath = sessionStorage.currentRouterPath;
             } else {
                 routerPath = "/menber-info-list";
@@ -46,7 +50,24 @@ export default {
             this.$router.push({
                 path: routerPath
             });
-        }
+        },
     }
 
+}
+
+
+// 登出
+export default {
+    methods: {
+        logoutHandle() {
+            // 删除记录的当前路由路径
+            sessionStorage.currentRouterPath = null;
+            // 删除cookies
+            checkLoginUtil.deletCookie();
+            //跳转到登录页面
+            this.$router.push({
+                path: "/login"
+            });
+        }
+    }
 }
